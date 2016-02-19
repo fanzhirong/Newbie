@@ -1,0 +1,6 @@
+platform :ios, '8.0'
+use_frameworks!
+
+target "Speech Assessment" do
+pod 'SWXMLHash', '~> 2.1.0'
+end
