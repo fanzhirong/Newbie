@@ -9,7 +9,17 @@
 import UIKit
 
 extension UIView {
-    class func animateWithStartView(view: UIView, duration: NSTimeInterval, endPoint: CGPoint, completed: (()->())?) {
+    /**
+     抛物线动画
+     
+     - parameter originView: 做抛物线的对象
+     - parameter duration:   时长(秒)
+     - parameter endPoint:   终点
+     - parameter completed:  回调
+     */
+    class func animateWithStartView(originView: UIView, duration: NSTimeInterval, endPoint: CGPoint, completed: (()->())?) {
+        let view = originView.copyView()
+        
         // 开始坐标
         let startX = view.frame.origin.x + view.frame.size.width / 2
         let startY = view.frame.origin.y + view.frame.size.height / 2
@@ -32,7 +42,42 @@ extension UIView {
         animation.duration = duration
         animation.autoreverses = false
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseIn)
-        view.layer.addAnimation(animation, forKey: "ParabolaAnimation")
+        UIView.delay(0.01) {
+            view.layer.addAnimation(animation, forKey: "ParabolaAnimation")
+        }
+        UIView.animateWithDuration(duration, animations: { () -> Void in
+            var rect = view.frame
+            rect.size.height = 10
+            rect.size.width = 10
+            view.frame = rect
+            }) { _ in
+                view.removeFromSuperview()
+                completed?()
+        }
+    }
+    
+    /**
+     复制一个view对象
+     
+     - returns: 赋值得到的新对象
+     */
+    func copyView() -> UIView {
+        let view = NSKeyedUnarchiver.unarchiveObjectWithData(NSKeyedArchiver.archivedDataWithRootObject(self))! as! UIView
+        self.superview?.addSubview(view)
+        return view
+    }
+    
+    /**
+     延时操作
+     
+     - parameter duration:  时长(秒)
+     - parameter completed: 回调
+     */
+    private class func delay(duration: NSTimeInterval, completed: ()->Void) {
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(duration * Double(NSEC_PER_SEC)))
+        dispatch_after(delay, dispatch_get_main_queue()) {
+            completed()
+        }
     }
 }
 
