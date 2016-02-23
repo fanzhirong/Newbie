@@ -61,7 +61,7 @@ extension UIView {
      
      - returns: 赋值得到的新对象
      */
-    func copyView() -> UIView {
+    private func copyView() -> UIView {
         let view = NSKeyedUnarchiver.unarchiveObjectWithData(NSKeyedArchiver.archivedDataWithRootObject(self))! as! UIView
         self.superview?.addSubview(view)
         return view
