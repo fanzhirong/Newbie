@@ -25,8 +25,8 @@ extension UIView {
         let startY = view.frame.origin.y + view.frame.size.height / 2
         
         // 中心点坐标
-        let centerX = startX + (endPoint.x - startX) / 3
-        let centerY = startY + (endPoint.y - startY) / 2 - 400
+        let centerX = startX + (endPoint.x - startX) / 2
+        let centerY = startY + (endPoint.y - startY) / 2 - 500
         let centerPoint = CGPoint(x: centerX, y: centerY)
         
         // 路径
